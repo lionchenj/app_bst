@@ -1,0 +1,17 @@
+.feedback-textarea {
+    background: #FFFFFF;
+    border: 1px solid #E8E8E8;
+    border-radius: 10px;
+    margin: 0.15rem;
+}
+.feedback-images-container {
+    margin: 0.15rem;
+}
+.feedback-images-text {
+    font-size: 0.14rem;
+    color: #999999;
+    margin-top: 0.15rem;
+}
+.feedback .feedback-images-container .am-image-picker-list{
+    height: .75rem !important;
+}

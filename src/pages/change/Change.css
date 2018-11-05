@@ -1,0 +1,28 @@
+.change-navbar-right{
+    width: .22rem;
+    height: .22rem;
+    background-image: url(../../assets//icon_change_log.png);
+    background-size: contain;
+}
+.change-list .am-list-item .am-input-label.am-input-label-5 {
+    width: 1.05rem;
+}
+.change-list .am-list-item .am-list-line .am-list-extra {
+    color: #333333;
+}
+.change-list .am-list-item {
+    height: 0.5rem;
+}
+.change-list .am-list-item.change-first-item {
+    height: 0.64rem;
+}
+.change-code-title{
+    margin-top: 1.5rem;
+    font-size: .14rem;
+    color: #000000;
+    text-align: center;
+}
+.change-code-img{
+    width: 1.5rem;
+    margin: .5rem auto
+}

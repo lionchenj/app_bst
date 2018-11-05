@@ -1,0 +1,53 @@
+
+.wallet-navbar-right{
+    width: .22rem;
+    height: .22rem;
+    background-image: url(../../assets//icon_wallet_top.png);
+    background-size: contain;
+}
+.wallet-slider{
+    padding: .3rem .1rem .1rem;
+}
+.wallet-text{
+    padding: .1rem .1rem 0;
+}
+.wallet-totle{
+    padding: .4rem .1rem;
+    text-align: start;
+}
+.withdraw-header-content {
+    margin: 0.15rem 0.15rem 0 0.15rem;
+    height: 1.01rem;
+    background-image: url(../../assets/property_top_bg.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.am-slider-handle{
+    border: 2px solid #21BD09;
+    z-index: 2;
+}
+.am-slider-track{
+    background-color: #21BD09;
+}
+.withdraw-header-content div {
+    text-align: center;
+    color: #FFFFFF;
+}
+.withdraw-title {
+    font-size: 0.12rem;
+    padding-top: 0.22rem;
+    line-height: 0.30rem;
+}
+.withdraw-num {
+    font-size: 0.28rem;
+}
+
+.lf{
+    float: left; 
+ }
+ .lr{
+     float:right;
+ }
+ .f-col{
+     color: #7f7f7f !important;
+ }

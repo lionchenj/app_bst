@@ -1,0 +1,16 @@
+.earings-filter-type-text {
+    height: 0.27rem;
+    line-height: 0.27rem;
+    padding:0 0.15rem;
+    font-size: 0.12rem;
+    color: #273665;
+    background-color: rgba(39, 54, 101, 0.15);
+}
+.am-popover-inner, .am-popover-inner-wrapper, .am-popover-arrow {
+    background: rgba(89,89,89,1) !important;
+    color: white;
+    font-size: 0.16rem;
+}
+.am-popover .am-popover-item:not(:first-child) .am-popover-item-container::before {
+    background-color:  #7A7A7A !important;
+}

@@ -1,0 +1,63 @@
+.fans-top-bg {
+    width: 100%;
+    height: 0.87rem;
+    background-image: linear-gradient(-90deg, rgb(175, 235, 139) 0%, #65AE3A 100%);
+}
+.fans-top-content {
+    height: 0.8rem;
+    margin-left: 0.15rem;
+    margin-right: 0.15rem;
+    margin-top: -0.4rem;
+
+    background: #FFFFFF;
+    box-shadow: 0 2px 9px 0 #F5B02A;
+    border-radius: 16px;
+}
+.fans-left-section, .fans-right-section {
+    float: left;
+    width: calc(50% - 0.5px);
+}
+.fans-middel-line {
+    width: 1px;
+    height: 0.35rem;
+    background: #C2C2C2;
+    float: left;
+    margin-top: 0.17rem;
+}
+.fans-left-section div, .fans-right-section div {
+    width: 100%;
+    text-align: center;
+}
+.fans-section-text {
+    font-size: 0.12rem;
+    margin-top: 0.16rem;
+}
+.fans-section-num {
+    font-size: 0.22rem;
+    color: #304071;
+}
+.fans-list-title {
+    font-size: 0.18rem;
+    color: #000000;
+    background-image: url(../../assets//icon_diamond.svg);
+    background-size: 0.18rem 0.14rem;
+    background-position-y: 0.04rem;
+    background-repeat:no-repeat;    
+    padding-left: 0.22rem;
+}
+.fans-row-item {
+    display: flex;
+    padding: 0.15rem; 
+    justify-content: space-between;
+}
+.fans-row-item-bold {
+    font-size: 0.17rem;
+    color: #000000;
+}
+.fans-row-item-normal {
+    font-size: 0.14rem;
+    color: #888888;
+}
+.fans-row-item-right {
+    text-align: right;
+}

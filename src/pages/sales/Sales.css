@@ -1,0 +1,20 @@
+.sales-row-item {
+    display: flex;
+    padding: 0.15rem; 
+    justify-content: space-between;
+}
+.sales-row-item-bold {
+    color: #333333;
+    font-size: 0.16rem;
+    line-height: 0.18rem;
+}
+.sales-row-item-normal {
+    color: #999999;
+    font-size: 0.14rem;
+    line-height: 0.16rem;
+}
+.sales-row-item-right {
+    font-size: 0.16rem;
+    text-align: right;
+    line-height: 0.30rem;
+}

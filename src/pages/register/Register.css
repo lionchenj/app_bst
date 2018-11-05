@@ -1,0 +1,25 @@
+.am-list-item .am-input-extra {
+    max-height: 30px;
+}
+.navbar {
+    position:fixed;
+    width:100%;
+    background-color:transparent;
+    top:0px;
+}
+.register-header {
+    margin-top: 0.50rem;
+}
+.code-button {
+    color: white;
+}
+.code-button::before {
+    border: 1px solid white !important;
+}
+.am-button.am-button-disabled {
+    color: #ffffff;
+}
+
+::-moz-placeholder { color: #333333; }
+::-webkit-input-placeholder { color:#333333; }
+:-ms-input-placeholder { color:#333333; }

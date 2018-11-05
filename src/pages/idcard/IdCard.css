@@ -1,0 +1,14 @@
+.idcard .feedback-images-container{
+    align-self: auto;
+}
+.idcard .feedback-images-container .am-image-picker-list{
+    height: 31vh;
+}
+.idcard .feedback-images-container .am-image-picker-list .am-image-picker-item{
+    width:100%;
+    height: 30vh;
+    top:30%;
+}
+.idcard .notice{
+    padding: 2vh;
+}

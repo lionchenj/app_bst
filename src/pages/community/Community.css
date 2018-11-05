@@ -1,0 +1,25 @@
+.address-list .am-list-item .am-input-label.am-input-label-5{
+    width: 0.9rem;
+}
+.address-username {
+    margin-left: 0.62rem;
+}
+.address-code-button {
+    color: #4A90E2;
+}
+.address-footer {
+    font-size: 0.14rem;
+    color: #999999;
+    padding: 0.30rem 0.15rem;
+}
+.address-footer-button-container {
+    margin: 0.10rem 0.15rem;
+}
+.address-footer-button-container a {
+    background: #65AE3A;
+    color: #000000;
+}
+input[placeholder], [placeholder], *[placeholder] {
+    color:#333333 !important;
+ }
+
