@@ -44,10 +44,10 @@
     "style-loader": "^0.22.1",
     "typescript": "^2.9.2"
   },
-  "homepage": "https://www.bst123456.com",
+  "homepage": "https://dev170.weibanker.cn/wujh/www/bst0104",
   "proxy": {
     "/shadow/vatc/*": {
-      "target": "https://www.bst123456.com",
+      "target": "https://www.bst123456.com/",
       "secure": false,
       "changeOrigin": true
     }

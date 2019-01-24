@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 import { History, Location } from "history";
-import { NavBar, Icon, ImagePicker, List, InputItem, WhiteSpace, Button,} from "antd-mobile";
+import { NavBar, Icon, List, InputItem, WhiteSpace, Button, Modal} from "antd-mobile";
 import { UIUtil } from '../../utils/UIUtil';
-//import { UserService } from '../../service/UserService';
+import { UserService } from '../../service/UserService';
 import { Redirect } from "react-router-dom";
 import './IdCard.css'
 
@@ -17,8 +17,8 @@ interface State {
 }
 
 export class IdCard extends React.Component<Props, State> {
-    name?: string
-    idcardNumber?: string
+    name: string
+    idcardNumber: string
     constructor(props: Props) {
         super(props)
         this.state = {
@@ -27,7 +27,7 @@ export class IdCard extends React.Component<Props, State> {
         }
     }
     onRedirectBack = () => {
-        this.props.history.goBack()
+        this.props.history.push("/settings")
     }
 
     onChange = (files: any[], type: any, index: number) => {
@@ -48,11 +48,6 @@ export class IdCard extends React.Component<Props, State> {
     onSubmit = () => {
         const nameInfo = "请输入姓名"
         const idcardInfo = "请输入正确的身份证号码"
-        const phoneInfo = "请上传身份证"
-        if (this.state.files.length == 0) {
-            UIUtil.showInfo(phoneInfo)
-            return 
-        }
         if (!this.name) {
             UIUtil.showInfo(nameInfo)
             return 
@@ -70,17 +65,20 @@ export class IdCard extends React.Component<Props, State> {
 
     
 
-        // UserService.Instance.register(phone, code, sharePhone, password, this.name, this.idcardNumber || "", this.state.files[0].file).then( () => {
-        //     Modal.alert('提示','注册成功',[{ text:'ok',onPress: () => {
-        //         this.setState({
-        //             ...this.state,
-        //             redirectToLogin: true
-        //         })
-        //     },style: 'default' }])
+        UserService.Instance.Identify(this.name, this.idcardNumber, this.state.files[0]).then( () => {
+            Modal.alert('提示','认证成功',[{ text:'ok',onPress: () => {
+                this.setState({
+                    ...this.state,
+                    redirectToLogin: true
+                })
+            },style: 'default' }])
             
-        // }).catch( err => {
-        //     UIUtil.showError(err)
-        // })
+        }).catch( err => {
+            UIUtil.showError(err)
+            if(err.errno ==="401"){
+                this.props.history.push("/login")
+            }
+        })
 
         console.log("onSubmit", this.state.files[0])
     }
@@ -105,17 +103,7 @@ export class IdCard extends React.Component<Props, State> {
                 </NavBar>
 
                 <div className="feedback-images-container">
-                   
-                    <ImagePicker
-                        length="1"
-                        files={this.state.files}
-                        onChange={this.onChange}
-                        onImageClick={(index, fs) => console.log(index, fs)}
-                        selectable={this.state.files.length < 1}
-                        multiple={false}
-                        />
 
-                    <div className="notice">请手动输入并拍照识别身份证信息</div>
                     <List className="content-item-border">
                             <InputItem name="name" placeholder="请输入您的真实姓名" onBlur={this.onNameBlur}>
                                姓名

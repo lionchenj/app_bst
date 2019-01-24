@@ -7,14 +7,9 @@ import { UIUtil } from '../../utils/UIUtil';
 import { model } from '../../model/model';
 
 
-
-
-
-
 interface WithdrawHistoryProps {
     history: History
 }
-
 
 interface WithdrawHistoryState {
     height: number,
@@ -55,7 +50,7 @@ export class WithdrawHistory extends React.Component<WithdrawHistoryProps, Withd
             rowHasChanged: (row1: model.TransactionItem, row2: model.TransactionItem) => row1 !== row2,
           });
           this.state = {
-            height:  document.documentElement.clientHeight - 200,
+            height:  document.documentElement.clientHeight - 100,
             visible: false,
             dataSource1,
             isLoading1: true,
@@ -76,18 +71,18 @@ export class WithdrawHistory extends React.Component<WithdrawHistoryProps, Withd
     }
 
     onRedirectBack = () => {
-        const history = this.props.history
-        history.goBack()
+        const history = this.props.history;
+        history.goBack();
     }
 
     componentDidMount() {
         //兑换
         UserService.Instance.exchangeRecord().then( (res) => {
             var list = res.list;
-            console.log(list)
+            console.log(list);
             if(list.length < 1){
-                this.setState({isLoading: false})
-                return
+                this.setState({isLoading: false});
+                return;
             }
           this.setState({
             dataSource: this.state.dataSource.cloneWithRows(res.list),
@@ -99,11 +94,13 @@ export class WithdrawHistory extends React.Component<WithdrawHistoryProps, Withd
           });
         }).catch( err => {
           UIUtil.showError(err)
+          if(err.errno ==="401"){
+            this.props.history.push("/login");
+          }
         })
         //充币
-        UserService.Instance.rechangeRecord(this.state.page1).then( (res) => {
+        UserService.Instance.rechangeRecord().then( (res) => {
             var list = res.list;
-            console.log(list)
             if(list.length < 1){
                 this.setState({isLoading1: false})
                 return
@@ -118,16 +115,25 @@ export class WithdrawHistory extends React.Component<WithdrawHistoryProps, Withd
           });
         }).catch( err => {
           UIUtil.showError(err)
+          if(err.errno ==="401"){
+            this.props.history.push("/login")
+          }
         })
         UserService.Instance.getCoin().then( (res) => {
             var list = []
             for(var i in res){
-                console.log('label:'+ res[i].name+',value:'+i)
-                list.push({name:res[i].name,id:res[i].id})
+                console.log('label:'+ res[i].name+',value:'+i);
+                list.push({name:res[i].name,id:res[i].id});
             }
             this.setState({
                 coins:list
             })
+        }).catch(err => {
+            UIUtil.showError(err);
+            if(err.errno ==="401"){
+                this.props.history.push("/login");
+            }
+
         })
       }
 
@@ -162,6 +168,8 @@ export class WithdrawHistory extends React.Component<WithdrawHistoryProps, Withd
     }
 
     public render() {
+        
+
         const separator1 = (sectionID: number, rowID: number) => (
             <div
               key={`${sectionID}-${rowID}`}
@@ -173,20 +181,20 @@ export class WithdrawHistory extends React.Component<WithdrawHistoryProps, Withd
           );
   
           const row1= (rowData: model.exreChangeRecordItem, sectionID: number, rowID: number) => {
-              var coinname = '';
-            for(var x of this.state.coins){
-                if(rowData.coin_id == x.id){coinname = x.name}
-                }
+            var coinstatue ='';
+            if(rowData.status == '-1'){coinstatue = '充值失败'}  
+            if(rowData.status == '1'){coinstatue = '审核中'}
+            if(rowData.status == '2'){coinstatue = '充值成功'}
             return (
                 <div style={{height:".6rem"}}>
-                    <div style={{float:"left",padding:".1rem"}}>
-                    {coinname}
-                    <div style={{marginTop:".1rem"}}>{rowData.number}</div></div>
-                    <div style={{float:"right",padding:".1rem"}}>
-                    if(rowData.status == '-1'){'充值失败'}  
-                    if(rowData.status == '1'){'审核中'}
-                    if(rowData.status == '2'){'充值成功'}
-                    <div style={{marginTop:".1rem"}}>{rowData.time}</div></div>
+                    <div style={{float:"left",paddingTop:".1rem",paddingLeft:".1rem"}}>
+                        {rowData.coin_name}
+                        <div style={{marginTop:".1rem"}}>{rowData.number}</div>
+                    </div>
+                    <div style={{float:"right",paddingTop:".1rem",paddingRight:".1rem"}}>
+                        {coinstatue}
+                        <div style={{marginTop:".1rem"}}>{rowData.time}</div>
+                    </div>
                 </div>
   
             );
@@ -205,8 +213,14 @@ export class WithdrawHistory extends React.Component<WithdrawHistoryProps, Withd
      
             return (
                 <div style={{height:".6rem"}}>
-                    <div style={{float:"left",padding:".1rem"}}>{rowData.coid_name}<div style={{marginTop:".1rem"}}>{rowData.number}</div></div>
-                    <div style={{float:"right",padding:".1rem"}}>{rowData.orderid}<div style={{marginTop:".1rem"}}>{rowData.time}</div></div>
+                    <div style={{float:"left",paddingTop:".1rem",paddingLeft:".1rem"}}>
+                        {rowData.coid_name}
+                        <div style={{marginTop:".1rem"}}>{rowData.number}</div>
+                    </div>
+                    <div style={{float:"right",paddingTop:".1rem",paddingRight:".1rem"}}>
+                        {rowData.orderid}
+                        <div style={{marginTop:".1rem"}}>{rowData.time}</div>
+                    </div>
                 </div>
   
             );

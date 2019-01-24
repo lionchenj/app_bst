@@ -33,7 +33,25 @@ export class UserService extends ServiceBase {
         
     }
 
-    public async register(mobile: string, code: string, shareMobile: string, password: string): Promise<void> {
+    //实名认证
+    public async Identify(name:string, identity_card:string, identity_imgurl:string): Promise<void> {
+        const params = {
+            name: name,
+            identity_card:identity_card,
+            identity_imgurl:identity_imgurl
+        }
+        return await this.httpPost("Identify", params)
+    }
+    
+    //检测是否实名认证
+    public async checkIdentify(): Promise<any> {
+      const params = {
+      };
+      const resp = await this.httpPost("checkIdentify", params);
+      return resp;
+    }
+
+    public async register(mobile: string, code: string, shareMobile?: string, password?: string): Promise<void> {
         const params = {
             mobile: mobile,
             password: password,
@@ -74,8 +92,17 @@ export class UserService extends ServiceBase {
     }
 
     //轮播
-    public async banner(): Promise<any> {
-        return await this.httpPost("banner")
+    public async banner(bannerType:number): Promise<any> {
+        const params = {
+            type: bannerType
+        }
+        return await this.httpPost("banner",params)
+    }
+    
+    //解约记录
+    public async quicken_list(): Promise<any> {
+        
+        return await this.httpPost("quicken_list")
     }
 
 
@@ -136,14 +163,44 @@ export class UserService extends ServiceBase {
         return await this.httpPost("activate", params)
 
     }
+
+    //银行卡
+    public async listPayment(): Promise<void> {
+        return await this.httpPost("listPayment")
+    }
+    //新增银行卡
+    public async addPayment(bank_name: string, account:string, name:string, phone:any): Promise<void> {
+        const params = {
+            bank_name:bank_name,
+            account:account,
+            name:name,
+            phone:phone
+        }
+        return await this.httpPost("addPayment", params, true)
+    }
+    //删除银行卡
+    public async deletePayment(account:string): Promise<void> {
+        const params = {
+            account:account
+        }
+        return await this.httpPost("deletePayment", params, true)
+    }
+    //设置设置默认卡
+    public async defaultPayment(account:string): Promise<void> {
+        const params = {
+            account:account
+        }
+        return await this.httpPost("defaultPayment ", params, true)
+    }
     //提现
-    public async assets(coin_id:string,number: string,verification_code:string,service:number,address:string): Promise<void> {
+    public async assets(coin_id:string,number: string,verification_code:string,service:number,address:string,bankinfo:string): Promise<void> {
         const params = {
             coin_id:coin_id,
             number:number,
             verification_code:verification_code,
             service:service,
-            address:address
+            address:address,
+            bankinfo:bankinfo
         }
         return await this.httpPost("assets", params, true)
 
@@ -159,15 +216,6 @@ export class UserService extends ServiceBase {
         return resp.data.list as Array<model.ActivateRecordItem>
     }
 
-    // 兑换激活卡
-    public async exchangeCard(num: number): Promise<void> {
-        const params = {
-            number: num
-        }
-        return await this.httpPost("exchangeCard", params)
-        
-    }
-
     public async transaction(transactionType: string, coinId?: "1"|"2", page?: number, limit?: number): Promise<model.PageData<model.TransactionItem>> {
         const params = {
             type: transactionType,
@@ -179,22 +227,13 @@ export class UserService extends ServiceBase {
         return resp.data as model.PageData<model.TransactionItem>
     }
     
-    public async pageAssets(): Promise<model.PageAssetsData> {
-        const resp = await this.httpPost("pageAssets")
-        return resp.data as model.PageAssetsData
-    }
-
-    public async getUsableCoin(): Promise<model.UsableCoin> {
-        const resp = await this.httpPost("getUsableCoin")
-        return resp.data as model.UsableCoin
-    }
-    
-    public async give(coinId: string, giveNumber: string, mobile: string, code: string): Promise<void> {
+    public async give(coinId: string, giveNumber: string, mobile: string, code: string, remarkinfo:string): Promise<void> {
         const params = {
             coin_id: coinId,
             number: giveNumber,
             mobile:mobile,
-            verification_code: code
+            verification_code: code,
+            remarkinfo: remarkinfo
         }
         return await this.httpPost("give", params)
     }
@@ -206,21 +245,20 @@ export class UserService extends ServiceBase {
         }
         return await this.httpPost("exchange", params)
     }
-    public async rechange(coinId: string, giveNumber: string, voucher:string, code: string, random:string): Promise<void> {
+    public async rechange(coinId: string, giveNumber: string, code: string, random:string): Promise<void> {
         const params = {
             coin_id: coinId,
             number: giveNumber,
-            voucher,
             verification_code: code,
             random
         }
         return await this.httpPost("rechange", params)
     }
     //充币log
-    public async rechangeRecord( page: number): Promise<any>{
+    public async rechangeRecord( page?: number,limit?:number): Promise<any>{
         const params = {
             page,
-            limit:10
+            limit
         }
         const resp = await this.httpPost("rechangeRecord", params)
         return resp.data as model.PageData<model.exreChangeRecordItem>
@@ -230,7 +268,7 @@ export class UserService extends ServiceBase {
         const params = {
             coin_id,
             page,
-            limit:10
+            limit
         }
         const resp = await this.httpPost("exchangeRecord", params)
         return resp.data as model.PageData<model.exChangeRecordItem>
@@ -256,15 +294,14 @@ export class UserService extends ServiceBase {
         }
         return await this.httpPost("community", params)
     }
-    // public async withdraw(coinId: string, withdrawNumber: string, code: string): Promise<void> {
-    //     const params = {
-    //         coin_id: coinId,
-    //         number: withdrawNumber,
-    //         verification_code: code
-    //     }
-    //     return await this.httpPost("assets", params)
-    // }
-
+    //社区会员记录
+    public async CommunityFan(downlineid: string): Promise<any> {
+        const params = {
+            downlineid:downlineid
+        }
+        return await this.httpPost("CommunityFan", params)
+    }
+   
     public async systemBulletin(): Promise<Array<model.SystemBulletinItem>> {
         const resp = await this.httpPost("systemBulletin")
         return resp.data.list as Array<model.SystemBulletinItem>
@@ -278,8 +315,13 @@ export class UserService extends ServiceBase {
         }
         return []
     }
+    // 关于我们
+        public async aboutus(): Promise<any> {
+            const params ={}
+            return await this.httpPost("aboutus", params,true)
+        }
 
-    //矿工费
+    //矿工费(优先服务费)
     public async getService(): Promise<model.ServiceData>{
         const resp = await this.httpPost("getService")
         return resp.data as model.ServiceData

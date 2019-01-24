@@ -23,3 +23,12 @@
 ::-moz-placeholder { color: #333333; }
 ::-webkit-input-placeholder { color:#333333; }
 :-ms-input-placeholder { color:#333333; }
+
+.register-container{
+    background: url(./../../assets/loginbg.png) no-repeat 50%;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    min-height: 100vh;
+    color: white;
+}

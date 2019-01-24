@@ -15,7 +15,6 @@ interface AddressState {
     mobile:string,
     idCard:string
 }
-
 export class Community extends React.Component<AddressProps, AddressState> {
 
     constructor(props: AddressProps) {
@@ -72,6 +71,9 @@ export class Community extends React.Component<AddressProps, AddressState> {
             UIUtil.showError(err)
         })
     }
+
+    
+
 
     public render () {
         return (

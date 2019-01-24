@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NavBar, Icon, Button, } from "antd-mobile";
+// import { NavBar, Icon, Button, } from "antd-mobile";
 import { History, Location } from "history";
 import "./ExchangeAgreement.css"
 import { UIUtil } from '../../utils/UIUtil';
@@ -17,14 +17,15 @@ export class ExchangeAgreement extends React.Component<ExchangeAgreementProps, E
     agree: boolean
     constructor(props: ExchangeAgreementProps) {
         super(props);
-        this.agree = false
+        this.agree = true
         this.state = {
 
         }
     }
 
     onRedirectBack = () => {
-        this.props.history.push("/")
+        this.props.history.goBack()
+
 
     }
 
@@ -38,17 +39,18 @@ export class ExchangeAgreement extends React.Component<ExchangeAgreementProps, E
             UIUtil.showInfo("请先了解并同意《寳树通协议》")
             return
         }
-        this.props.history.push("/exchange")
+        this.props.history.push("/")
+
     }
 
     public render() {
         return (
             <div className="message-container">
-                <NavBar icon={<Icon type="left" />}
+                {/* <NavBar icon={<Icon type="left" />}
                     onLeftClick={this.onRedirectBack}
                     className="home-navbar" >
                     <div className="nav-title">寳树通协议</div>
-                </NavBar>
+                </NavBar> */}
                 <div className="page-content-container exchange-argeement-container">
                     <div >
                         {/* <p>寳树通协议</p>
@@ -90,12 +92,10 @@ export class ExchangeAgreement extends React.Component<ExchangeAgreementProps, E
                         <p>9、本协议通过线上支付购买后即时生效，如需纸质协议可线下申请。本协议在履行过程中如出现争议，由甲乙双方协商解决；协商不成，由相关部门进行调解；协商、调解不成的，可向甲方所在地人民法院申请诉讼。</p>
                         <p>10、本协议最终解释权归广州宝树通农业科技有限公司所有。</p>
                     </div>
-                    <div className="argeement-confirm">
-                        <label><input type="checkbox" onChange={this.onChangeChecked} />&nbsp;&nbsp;我已了解并同意《寳树通协议》</label>
-                    </div>
-                    <div className="address-footer-button-container" onClick={this.onSubmit}>
+                   
+                    {/* <div className="address-footer-button-container" onClick={this.onSubmit}>
                         <Button type="primary">同意</Button>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         );

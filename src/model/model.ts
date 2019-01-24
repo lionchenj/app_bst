@@ -5,7 +5,8 @@ export namespace model {
         referee: string,
         renickname: string,
         activate: boolean,
-        head_imgurl: string
+        head_imgurl: string,
+        errmsg:string
 
     }
 
@@ -20,7 +21,11 @@ export namespace model {
         usable: number,    // 可用
         total: number,    // 资产
     }
-    
+    export interface bankCardItem {
+        account: string,
+        bank_name: string,
+        type: string
+    }    
     export interface VethPriceData {
         vethPrice: number,      //VETH激活卡价格
     }
@@ -38,6 +43,8 @@ export namespace model {
         total: number,
         not_active: number,
         recharge_num: number,
+        count: number,
+        todaycount: number,
         list: Array<Fans>
     }
 
@@ -80,11 +87,20 @@ export namespace model {
         time: string,
         coid_name: string,
     }
+
+    export interface BankAssetsItem {
+        card: string,
+        id: string,
+        userid: string,
+        create_time: string,
+        name: string
+    }
+
     export interface exreChangeRecordItem {
         status: string,
         number: string,
         time: string,
-        coin_id: string,
+        coin_name: string,
     }
     export interface TransactionItem {
         orderid: string,
@@ -93,7 +109,26 @@ export namespace model {
         surplus: string,
         coin_id: string,
         time: string,
-        style: string
+        style: string,
+        consignee: string,
+        type: number,
+        service:number
+    }
+
+    export interface NoContractHistoryItem{
+        status:string
+        userid:string
+        create_time:string
+        number:string
+        random:string
+    }
+
+    export interface TeamHistoryItem{
+        status:string
+        userid:string
+        number:string
+        random:string
+        time:string
     }
 
     export interface PageAssetsData {
@@ -111,7 +146,6 @@ export namespace model {
         act_money: string
     }
 
-
     export interface SystemBulletinItem {
         time: string,
         title: string,
@@ -126,10 +160,9 @@ export namespace model {
         surplus: string,    // 交易后数值
         coin_id: string,
         time: string,
-        style: string
-    }
-
-    
+        style: string,
+        remarkinfo:string
+    }    
 
     export interface TransferItem {
         orderid: string,

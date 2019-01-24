@@ -302,6 +302,8 @@ a.am-button.code-button.am-button-ghost.am-button-small.am-button-disabled{
 .banner-img{
     width: 100%;
     height: auto;
+    
+    
 }
 .margin-t0{
     margin-top: 0;
@@ -334,4 +336,15 @@ a.am-button.code-button.am-button-ghost.am-button-small.am-button-disabled{
     display: inline-block;
     text-align: center;
     line-height: .4rem;
+}
+.home-banner{
+    height: 1.5rem;
+    overflow: hidden;
+}
+.home-top-img>img {
+    width: .5rem;
+    height: .4rem;
+}
+.slider-frame{
+    height: 1.5rem !important
 }

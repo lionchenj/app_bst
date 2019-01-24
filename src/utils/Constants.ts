@@ -1,5 +1,5 @@
-
 // export const ApiBaseUrl = "https://www.bst123456.com/bst/"
-export const ApiBaseUrl = "http://dev110.weibanker.cn/chencp/www/bst/"
+// export const ApiBaseUrl = "https://dev170.weibanker.cn/shadow/www/bst/"
+export const ApiBaseUrl = "https://dev170.weibanker.cn/zhouzf/www/bst1/"
 export const AndroidUserAgent = "inapp/1"
 export const IOSUserAgent = "inapp/2"

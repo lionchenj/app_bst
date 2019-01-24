@@ -64,7 +64,7 @@ export class Register extends React.Component<Props, RegisterState> {
     onSubmit = () => {
         const info = "请输入11位手机号码"
         const codeInfo = "请输入验证码"
-        const sharePhoneInfo = "分享人手机号码格式不正确"
+        const sharePhoneInfo = "请填写正确的分享人手机号码"
         const passwordInfo = "请输入不少于6位长度的密码"
         if (!this.phone) {
             Toast.info(info)
@@ -79,6 +79,10 @@ export class Register extends React.Component<Props, RegisterState> {
             Toast.info(codeInfo)
             return
         }
+        if (!this.sharePhone) {
+            Toast.info(sharePhoneInfo)
+            return
+        } 
         const trimCode = Util.trim(this.code!)
         let trimSharePhone = ""
         if (this.sharePhone) {
@@ -173,7 +177,7 @@ export class Register extends React.Component<Props, RegisterState> {
         }
 
         return (
-            <div className="login-container">
+            <div className="register-container">
                 <NavBar mode="light" icon={<Icon type="left" color="#fff" />} className="navbar" onLeftClick={this.navBack} ></NavBar>
                 <Flex direction="column">
                     
@@ -186,23 +190,19 @@ export class Register extends React.Component<Props, RegisterState> {
                     </div>
                     <div className="content">
                         <List className="content-item-border">
-                            <InputItem name="phone" type="digit" maxLength={11}  placeholder="请输入手机号" onBlur={this.onPhoneBlur}>
-                               
+                            <InputItem name="phone" type="phone"  placeholder="请输入手机号" onBlur={this.onPhoneBlur}>
                             </InputItem>
-                            
-                            
-                            
+
                         </List>
                         <List className="content-item-border">
                             <InputItem  type="number" placeholder="请输入短信验证码" onBlur={this.onCodeBlur}
                                 extra={<Button disabled={this.state.codeCountDown > 0} type="ghost" size="small" className="code-button" >{ this.state.codeCountDown > 0 ? this.state.codeCountDown: "获取验证码"}</Button>}
                                 onExtraClick={ this.state.codeCountDown > 0 ? undefined : this.getCode}
                             >
-                              
                             </InputItem>
                         </List>
                         <List className="content-item-border">
-                            <InputItem type="digit" maxLength={11} placeholder="请输入分享人手机号" onBlur={this.onSharePhoneBlur} defaultValue={query.mobile}
+                            <InputItem type="phone" placeholder="请输入分享人手机号" onBlur={this.onSharePhoneBlur} defaultValue={query.mobile}
                                 >
                                
                             </InputItem>

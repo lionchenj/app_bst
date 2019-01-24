@@ -17,7 +17,7 @@ import iconSettings from "../../assets/icon_settings.png"
 import iconSystemMessage from "../../assets/icon_system_message.png"
 
 import iconExchange from "../../assets/icon_exchange.png"
-import iconWallet from "../../assets/icon_wallet.png"
+// import iconWallet from "../../assets/icon_wallet.png"
 import iconChange from "../../assets/icon_change.png"
 import iconTeam from "../../assets/icon_team.png"
 import iconCommunity from "../../assets/icon_community.png"
@@ -30,14 +30,13 @@ import icon_UsablePass from "../../assets/icon_usablePass.png"
 
 import treeBg from "../../assets/tree-bg.jpg"
 
-
+import { UserStorage } from "../../storage/UserStorage";
 import { UserService } from '../../service/UserService';
 import { AndroidUserAgent, IOSUserAgent } from "../../utils/Constants";
 
 import { model } from '../../model/model';
 import { UIUtil } from '../../utils/UIUtil';
 // import { number } from 'prop-types';
-
 
 interface HomeProps {
     history: History
@@ -56,7 +55,9 @@ interface HomeState {
     index:number,
     xstr:any,
     ystr:any,
-    banners:any
+    banners:any,
+    changefix:any
+    // istoday:any
   
 }
 // interface MenuItem {
@@ -65,16 +66,8 @@ interface HomeState {
 // }
 const homeBottomMenuData = [
     {
-        icon: iconQrcode,
-        text: '分享二维码'
-    },
-    {
         icon: iconExchange,
         text: '购树兑换'
-    },
-    {
-        icon: iconWallet,
-        text: '种子钱包'
     },
     {
         icon: iconChange,
@@ -85,10 +78,12 @@ const homeBottomMenuData = [
         text: "我的团队"
     },
     {
-        icon: iconCommunity,
-        text: "社区申请"
+        icon: iconQrcode,
+        text: '分享二维码'
     }
 ]
+
+
 // const dataTest=[
 //     {
 //         name:"奖励1"
@@ -118,54 +113,65 @@ export class Home extends React.Component<HomeProps, HomeState> {
             index:-1,
             xstr:null,
             ystr:null,
-            banners:[]
-          
+            banners:[],
+            changefix:0
+
         }
     }
+
 
     onTapHomeMenu = (el: object, index: number) => {
         console.log("onTapHomeMenu", el, index)
         if (index == 0) {
+            this.props.history.push("/treedetail")
+        } else if (index == 1) {
+            this.props.history.push("/change")
+        } else if (index == 2) {
+            this.onCommunityStatus();
+        } else if (index == 3) {
             this.setState({
                 ...this.state,
                 showQRCode: true
             })
-        } else if (index == 1) {
-            this.props.history.push("/exchangeAgreement")
-        } else if (index == 2) {
-            this.props.history.push("/wallet")
-        } else if (index == 3) {
-            this.props.history.push("/change")
-        } else if (index == 4) {
-            this.props.history.push("/myTeam")
-        }else if (index == 5) {
-            this.onCommunityStatus();
+            // this.onDownloadQRCode()
+
         }
     }
+
+    //判断是否已成为运营中心
     onCommunityStatus = () => {
-        UserService.Instance.community_status().then( (res) => {
+        UserService.Instance.community_status().then( (res)=>{
             console.log(res)
-            if(res.errno){
-                if(res.errno == 30021){
-                    Modal.alert('提示',res.errmsg,[{ text:'ok',onPress: () => {
-                        this.props.history.goBack()
-                    }, style: 'default' }])
-                    return;
-                }
-                if(res.errno == 30022){
-                    Modal.alert('提示',res.errmsg,[{ text:'ok',onPress: () => {
-                        this.props.history.goBack()
-                    }, style: 'default' }])
-                    return;
-                }
-                if(res.errno == 0){
-                    this.props.history.push("/community")
-                }
-            }else{
-                this.props.history.push("/community")
+            //0是可申请状态，30021是审核状态
+            if(res.errno == 0){
+                Modal.alert('提示', '请先成为运营中心', [
+                    { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
+                    { text: '确认', onPress: () => this.props.history.push("/community") },
+                ]);
+                
+            }
+            if(res.errorCode == 30021){
+                Modal.alert('提示', '运营中心正在审核')
             }
         }).catch( err => {
-            UIUtil.showError(err)
+            console.log(err.errorCode,err );
+            
+            if(err.errorCode == 0){
+                Modal.alert('提示', '请先成为运营中心', [
+                    { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
+                    { text: '确认', onPress: () => this.props.history.push("/community") },
+                ]);
+                
+            }
+            if(err.errorCode == 30021){
+                Modal.alert('提示', '运营中心正在审核');
+                
+            }
+            if(err.errorCode == 30022){
+
+              this.props.history.push("/myTeam");
+
+            }
         })
     }
 
@@ -175,10 +181,14 @@ export class Home extends React.Component<HomeProps, HomeState> {
             showQRCode: false
         })
     }
+    
+    changefix = () =>{
+        parseFloat("2").toFixed(2);
+    }
 
     onDownloadQRCode = () => {
         const canvas: any = document.querySelector('.qr-modal-content-containter > canvas');
-        let href = canvas.toDataURL()
+        let href = canvas.toDataURL();
 
         if (!this.inapp) {
             const w = window.open('about:blank', 'image from canvas');
@@ -196,99 +206,93 @@ export class Home extends React.Component<HomeProps, HomeState> {
        
         
     }
-
-
+    onGotoExchange = () => {
+        //selected用于设置路由跳转时，tab选项卡的切换
+        this.props.history.push("/wallet",{selected: true})
+    }
+    onGotoWallet = () => {
+        this.props.history.push("/wallet");
+    }
 
     onGotoWithdraw = () => {
-        this.props.history.push("/withdraw")
+        this.props.history.push("/withdraw");
     }
 
     onGotoDeposit = () => {
-        this.props.history.push("/deposit")
+        this.props.history.push("/deposit");
     }
 
     onGotoSettingPage = () => {
-        this.props.history.push("/settings")
+        this.props.history.push("/settings");
     }
 
     onGotoMessagePage = () => {
-        this.props.history.push("/message", {messageType: "1"})
+        this.props.history.push("/message", {messageType: "1"});
     }
 
     onGotoMailPage = () => {
-        this.props.history.push("/message", {messageType: "2"})
+        this.props.history.push("/message", {messageType: "2"});
     }
 
     onGotoAddressPage = () => {
-        this.props.history.push("/address")
+        this.props.history.push("/address");
     }
 
     onGotoUpdatePwdPage = () => {
-        this.props.history.push("/update_pwd")
+        this.props.history.push("/update_pwd");
     }
 
     onGotoFeedbackPage = () => {
-        this.props.history.push("/feedback")
+        this.props.history.push("/feedback");
+    }
+    onGotoCommunitykPage = () => {
+        this.props.history.push("/community");
+    }
+    onGotoEarningsPage = () => {
+        this.props.history.push("/earnings");
     }
 
-    onEndReached = (event:any) => {
-        // load new data
-        // hasMore: from backend data, indicates whether it is the last page, here is false
-        // if (this.state.isLoading && !this.state.hasMore) {
-        //   return;
-        // }
 
-      }
-    onSignIn = () => {
-        if (this.state.isSignIn) {
-            return 
-        }
-        UserService.Instance.signIn().then( () => {
-            UIUtil.showInfo("签到成功")
-            this.setState({
-                isSignIn: true
-            })
-        }).catch( err => {
-            UIUtil.showError(err)
-        })
-    }
+    //首页轮播图
     getBanner = () => {
-        UserService.Instance.banner().then( (res) => {
-            console.log(res)
+        UserService.Instance.banner(1).then( (res) => {
             this.setState({
                 banners:res.data?res.data:Banner
             })
         }).catch( err => {
-            UIUtil.showError(err)
+            UIUtil.showError(err);
             this.setState({
                 banners:Banner
             })
         })
     }
+    
     onAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        event.preventDefault()
-        const files = event.target.files
+        event.preventDefault();
+        const files = event.target.files;
         if (!files || files.length == 0) {
             return 
         }
         UIUtil.showLoading("上传中")
         UserService.Instance.updateHead(files[0]).then( avatarUrl => {
-            const userInfo = this.state.userInfo
+            const userInfo = this.state.userInfo;
             if (userInfo) {
-                userInfo.head_imgurl = avatarUrl
+                userInfo.head_imgurl = avatarUrl;
                 this.setState({
                     userInfo: userInfo
                 })
             }
-            UIUtil.hideLoading()
+            UIUtil.hideLoading();
         }).catch( err => {
-            UIUtil.showError(err)
+            UIUtil.showError(err);
+            if(err.errno ==="401"){
+                this.props.history.push("/login");
+            }
         })
     }
 
-    public componentDidUpdate() {
-    }
     private _loadDataWithStyle(selectedType?: string) {
+        // this.isTodaydata()
         UserService.Instance.profit(selectedType).then( (profitData) => {
           //const offsetTop = (ReactDOM.findDOMNode(this.lv)!.parentNode! as HTMLElement).offsetTop
           //const hei = document.documentElement.clientHeight - offsetTop
@@ -297,11 +301,12 @@ export class Home extends React.Component<HomeProps, HomeState> {
             list:profitData
           });
         })
-      }
-    public componentWillMount() {
 
+    }
+    public componentWillMount() {
+        // this.getDaydata()
         this.getBanner()
-        console.log("componentDidUpdate", this.props.history.location.hash)
+        console.log("componentWillMount", this.props.history.location.hash)
         const hash = this.props.history.location.hash
         let selectedTab: "HomeTab"|"PropertyTab"|"ProfileTab" = "HomeTab"
         if (hash.length > 0) {
@@ -314,37 +319,52 @@ export class Home extends React.Component<HomeProps, HomeState> {
         this.setState({
             selectedTab: selectedTab
         })
+        
     }
     
     public componentDidMount() {
 
         this._loadDataWithStyle('0');
 
-        const userAgentItemList = window.navigator.userAgent.split(" ")
-        
+        const userAgentItemList = window.navigator.userAgent.split(" ");
         for (const item of userAgentItemList) {
             if (item.startsWith("inapp/")) {
-                this.inapp = item
-                break
+                this.inapp = item;
+                break;
             }
         }
         UserService.Instance.getUserInfo().then( userInfo => {
-            this.setState({
-                ...this.state,
-                userInfo: userInfo
-            })
+
+            //若获取不到用户数据，则跳转到登录页面
+            console.log(userInfo);
+            if(userInfo == undefined){
+                this.props.history.push("/login")
+            }
+            // if (userInfo.errmsg) {
+            //     this.props.history.push("/login");
+            //     return;
+            // }
+            else{
+                UserStorage.setCookie('mobile',userInfo.mobile)
+                this.setState({
+                    ...this.state,
+                    userInfo: userInfo
+                })
+            }
         }).catch ( err => {
-            if (err.errorCode) {
-                if (err.errorCode == "401") {
-                    this.props.history.push("/login")
+
+            if (err) {
+                if (err.errorCode == "401" ||err.errno ==="401") {
+                    this.props.history.push("/login");
                 }
+                
             }
         })
         UserService.Instance.pageIndex().then( pageIndexData => {
             this.setState({
                 pageIndexData: pageIndexData
             })
-            console.log(this.state.pageIndexData)
+            // console.log(this.state.pageIndexData)
         })
         const a=[];const b=[];
         for(let i=0; i<this.state.list.length;i++){
@@ -363,10 +383,9 @@ export class Home extends React.Component<HomeProps, HomeState> {
         }
 
 
-
     }
     bubbleReomove(e:any){
-        console.log(e)
+        console.log(e);
        // this.setState({ remove: true })
        var index=e.target.getAttribute("data-index");
     //    e.target.css={display:"none"}
@@ -379,21 +398,24 @@ export class Home extends React.Component<HomeProps, HomeState> {
 
 
     public render() {
-        const refUrl = `https://www.bst123456.com/register?mobile=${this.state.userInfo&&this.state.userInfo.mobile}`
-
+        let refUrl = `https://www.bst123456.com/register?mobile=${this.state.userInfo&&this.state.userInfo.mobile}`
+        // const stock = Number(this.state.pageIndexData.lock) + Number(this.state.pageIndexData.usable);
         // const a=this.state.xstr;
         // console.log(a[0])
           let conment=[];
-          for(let i=0; i<this.state.list.length;i++){
-           
-            const num1= Math.random()*200 + 1;
-            const num2= Math.random()*90 + 5;
-            const X= String(num1)+'px';
-            const Y=String(num2)+'px';
-            conment.push(<div className="bubble-item" style={{left:X,top:Y,display:this.state.index==i?'none':''}} onClick={(e) => this.bubbleReomove(e)}>
-                <div className="bubble" data-index={i}>+15</div>
-                <div style={{color:'#fff',textShadow:'0 0 5px #39C687',fontSize:'14px'}}>{this.state.list[i].name}</div>
-            </div>)
+          if (this.state.list){
+
+            for(let i=0; i<this.state.list.length;i++){
+            
+                const num1= Math.random()*200 + 1;
+                const num2= Math.random()*90 + 5;
+                const X= String(num1)+'px';
+                const Y=String(num2)+'px';
+                conment.push(<div className="bubble-item" style={{left:X,top:Y,display:this.state.index==i?'none':''}} onClick={(e) => this.bubbleReomove(e)}>
+                    <div className="bubble" data-index={i}>+15</div>
+                    <div style={{color:'#fff',textShadow:'0 0 5px #39C687',fontSize:'14px'}}>{this.state.list[i].name}</div>
+                </div>)
+            }
           }
           let banners = [];
           if(this.state.banners.length != 0 ){
@@ -418,7 +440,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
                                             ...this.state,
                                             selectedTab: "HomeTab"
                                         })
-                                        this.props.history.push("#HomeTab")
+                                        this.props.history.push("#HomeTab");
                                     }
                                 }
                                 icon={<div style={{
@@ -439,42 +461,24 @@ export class Home extends React.Component<HomeProps, HomeState> {
                                     </Carousel>
                                 </div>
                                 <div className="home-top-container">
-                                    <div className="home-top-item"> 
+                                    <div className="home-top-item" onClick={this.onGotoWallet} key="LockPass"> 
                                         <div className="home-top-img"><img src={iconLockPass}/></div>
-                                        <div><div className="home-top-title">已购种子</div><div className="home-top-num">{this.state.pageIndexData && this.state.pageIndexData.lock}</div></div>
+                                        <div><div className="home-top-title">已购种子</div><div className="home-top-num">{this.state.pageIndexData && this.state.pageIndexData.lock }</div></div>
                                     </div>
-                                    <div className="home-top-item"> 
+                                    <div className="home-top-item" onClick={this.onGotoExchange} key="UsablePass"> 
                                         <div className="home-top-img"><img src={icon_UsablePass}/></div>
                                         <div><div className="home-top-title">可兑换种子</div><div className="home-top-num">{this.state.pageIndexData && this.state.pageIndexData.usable}</div></div>
                                     </div>
-                                    <div className="home-top-item"> 
+                                    <div className="home-top-item" onClick={this.onGotoEarningsPage} key="Assets"> 
                                         <div className="home-top-img"><img src={iconAssets}/></div>
-                                        <div><div className="home-top-title">种子库</div><div className="home-top-num">{this.state.pageIndexData && this.state.pageIndexData.total}</div></div>
+                                        <div><div className="home-top-title">种子库</div><div className="home-top-num">{this.state.pageIndexData && ((Number(this.state.pageIndexData.lock) + Number(this.state.pageIndexData.usable)).toFixed(2))}</div></div>
                                     </div>
-                                    <div className="home-top-item"> 
+                                    <div className="home-top-item" key="Lucre"> 
                                         <div className="home-top-img"><img src={iconLucre}/></div>
                                         <div><div className="home-top-title">新增种子</div><div className="home-top-num">{this.state.pageIndexData && this.state.pageIndexData.profit}</div></div>
                                     </div>
                                    
-                                    {/* <div>
-                                        <div className="home-top-main-container">
-                                            <div className="home-top-checkin-container" >
-                                                    <div>昨日收益</div><div>{this.state.pageIndexData && this.state.pageIndexData.profit}</div>
-                                            </div>
-                                            <div className="home-top-text-container">
-                                                <div className="left-section">
-                                                    <div className="left-section-text">在投通证（个）</div>
-                                                    <div className="left-section-num">{this.state.pageIndexData && this.state.pageIndexData.lock}</div>
-                                                </div>
-                                                <div className="middel-line"></div>
-                                                <div className="right-section">
-                                                    <div className="left-section-text">可提现通证（个）</div>
-                                                    <div className="left-section-num">{this.state.pageIndexData && this.state.pageIndexData.usable}</div>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-                                    </div> */}
+                                    
                                 </div>
                                 <div className="profile-list">
                                     <Grid data={homeBottomMenuData} hasLine={false} onClick={this.onTapHomeMenu} columnNum={4}>
@@ -488,44 +492,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
                                         {conment}
                                     </div>
                                 </div>
-                                 {/* <List  className="profile-list">
-                                    <List.Item
-                                        thumb= {homeBottomMenuData[0].icon}
-                                        arrow="horizontal"
-                                        onClick={() => { this.onTapHomeMenu(0) }}
-                                        >{homeBottomMenuData[0].text}
-                                    </List.Item>
-                                    <List.Item
-                                        thumb= {homeBottomMenuData[1].icon}
-                                        arrow="horizontal"
-                                        onClick={() => { this.onTapHomeMenu(1) }}
-                                        >{homeBottomMenuData[1].text}
-                                    </List.Item>
-                                    <List.Item
-                                        thumb= {homeBottomMenuData[2].icon}
-                                        arrow="horizontal"
-                                        onClick={() => { this.onTapHomeMenu(2) }}
-                                        >{homeBottomMenuData[2].text}
-                                    </List.Item>
-                                    <List.Item
-                                        thumb= {homeBottomMenuData[3].icon}
-                                        arrow="horizontal"
-                                        onClick={() => { this.onTapHomeMenu(3) }}
-                                        >{homeBottomMenuData[3].text}
-                                    </List.Item>
-                                    <List.Item
-                                        thumb= {homeBottomMenuData[4].icon}
-                                        arrow="horizontal"
-                                        onClick={() => { this.onTapHomeMenu(4) }}
-                                        >{homeBottomMenuData[4].text}
-                                    </List.Item>
-                                    <List.Item
-                                        thumb= {homeBottomMenuData[5].icon}
-                                        arrow="horizontal"
-                                        onClick={() => { this.onTapHomeMenu(5) }}
-                                        >{homeBottomMenuData[5].text}
-                                    </List.Item>
-                                </List> */}
+                                 
                                 
                                 <div className="menu-container">
                                    
@@ -541,8 +508,9 @@ export class Home extends React.Component<HomeProps, HomeState> {
                                         <div className="qr-modal-content-containter" >
                                             <WhiteSpace size='xl' />
                                             <QRCode value={refUrl} size={128} />
-                                            <WhiteSpace size='xl' />
-                                            <div>{this.state.userInfo && this.state.userInfo.nickname}</div>
+                                            <div style={{color:'#000'}}>{this.state.userInfo && this.state.userInfo.nickname}</div>
+                                            <WhiteSpace size='lg' />                                            
+                                            <div>扫码后，请用手机浏览器打开</div>
                                         </div>
                                     </Modal>
                                 </div>
@@ -588,21 +556,28 @@ export class Home extends React.Component<HomeProps, HomeState> {
                                         </div>
                                   </div>
                                 </div>
-                                <List renderHeader={() => ''} className="profile-list">
-                                    <List.Item
+                                <List renderHeader='' className="profile-list">
+                                    <List.Item key="MessagePage"
                                         thumb= {iconPlatformNotice}
                                         arrow="horizontal"
                                         onClick={this.onGotoMessagePage}
                                         >平台公告
                                     </List.Item>
-                                    <List.Item
+                                    <List.Item key="CommunitykPage"
+                                        thumb= {iconCommunity}
+                                        onClick={this.onGotoCommunitykPage}
+                                        arrow="horizontal"
+                                        >
+                                        社区申请
+                                    </List.Item>
+                                    <List.Item key="FeedbackPage"
                                         thumb= {iconFeedback}
                                         onClick={this.onGotoFeedbackPage}
                                         arrow="horizontal"
                                         >
                                         意见反馈
                                     </List.Item>
-                                    <List.Item
+                                    <List.Item key="MailPage"
                                         thumb= {iconSystemMessage}
                                         onClick={this.onGotoMailPage}
                                         arrow="horizontal"
@@ -611,8 +586,8 @@ export class Home extends React.Component<HomeProps, HomeState> {
                                     </List.Item>
                                 </List>
 
-                                <List renderHeader={() => ''} className="profile-list">
-                                    <List.Item
+                                <List renderHeader='' className="profile-list">
+                                    <List.Item key="SettingPage"
                                         thumb= {iconSettings}
                                         arrow="horizontal"
                                         onClick={this.onGotoSettingPage}

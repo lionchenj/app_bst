@@ -55,7 +55,7 @@ export class DepositHistory extends React.Component<DepositHistoryProps, Deposit
     }
 
     componentDidMount() {
-      UserService.Instance.transaction("6").then( (transactionData) => {
+      UserService.Instance.transaction("1").then( (transactionData) => {
         const offsetTop = (ReactDOM.findDOMNode(this.lv)!.parentNode! as HTMLElement).offsetTop
         const hei = document.documentElement.clientHeight - offsetTop
         this.setState({

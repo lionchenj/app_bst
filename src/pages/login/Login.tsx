@@ -13,7 +13,6 @@ import { Util } from '../../utils/Util';
 import { UserService } from '../../service/UserService';
 
 
-
 export interface LoginProps {
     location: Location<any> | undefined
 }
@@ -116,7 +115,7 @@ export class Login extends React.Component<LoginProps, LoginState> {
                     </div> 
                     <div className="content">
                         <List className="content-item-border">
-                            <InputItem type="digit" maxLength={11} placeholder="请输入手机号" onBlur={this.onPhoneBlur}>
+                            <InputItem type="number" maxLength={11} placeholder="请输入手机号" onBlur={this.onPhoneBlur}>
                                 <div className="phone-image"/>
                             </InputItem>
                         </List>
@@ -132,7 +131,7 @@ export class Login extends React.Component<LoginProps, LoginState> {
                             <Button className="login-button" onClick={this.onSubmit} >登录</Button>
                         </List>
                         <List className="content-item">
-                            <Button type="ghost" className="register-button" onClick={this.navToRegister} >登记</Button>
+                            <Button type="ghost" className="register-button" onClick={this.navToRegister} >注册</Button>
                         </List>
                     </div>
                     

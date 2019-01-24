@@ -1,0 +1,12 @@
+.tree-banner{
+    height: 2.2rem;
+    overflow: hidden;
+}
+
+.tree-banner .slider-frame{
+    height: 2.2rem !important
+}
+.tree-banner .slider-frame .slider-list{
+    height: 2.2rem !important
+
+}

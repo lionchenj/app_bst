@@ -51,7 +51,7 @@
     justify-content: space-between;
 }
 .fans-row-item-bold {
-    font-size: 0.17rem;
+    font-size: 0.14rem;
     color: #000000;
 }
 .fans-row-item-normal {
@@ -60,4 +60,14 @@
 }
 .fans-row-item-right {
     text-align: right;
+}
+.foot-list{
+    height: .6rem;
+    width: 100%;
+}
+.foot-list div{
+    line-height: 1;
+    padding: .1rem 0 0 .1rem;
+    height: .2rem;
+    width: 100%;
 }

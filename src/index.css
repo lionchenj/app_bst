@@ -7,7 +7,7 @@ body {
   font-family: sans-serif;
   max-width: 540px;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 97vh;
 }
 .am-toast-notice-content .am-toast-text {
   color: white;

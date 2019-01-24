@@ -172,7 +172,7 @@ export class UpdatePwd extends React.Component<UpdatePwdProps, UpdatePwdState> {
                     </div>
                     <div className="content">
                 <List className="content-item-border">
-                    <InputItem type="digit" maxLength={11}  placeholder="请输入手机号" onBlur={this.onPhoneBlur}></InputItem>
+                    <InputItem type="phone" placeholder="请输入手机号" onBlur={this.onPhoneBlur}></InputItem>
                 </List>
                 <List className="content-item-border">
                     <InputItem placeholder="请输入短信验证码" onBlur={this.onCodeBlur}

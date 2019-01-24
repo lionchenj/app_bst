@@ -67,6 +67,10 @@ export class Activate extends React.Component<ActivateProps, ActivateState> {
           })
        }).catch( err => {
          UIUtil.showError(err)
+         if(err.errno=="401"||err.errno=="400"){
+            this.props.history.push("/login")
+
+          }
        })
       
       }

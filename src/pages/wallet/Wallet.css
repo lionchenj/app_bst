@@ -41,13 +41,23 @@
 .withdraw-num {
     font-size: 0.28rem;
 }
-
 .lf{
     float: left; 
- }
- .lr{
+}
+.lr{
      float:right;
- }
- .f-col{
+}
+.f-col{
      color: #7f7f7f !important;
- }
+}
+
+.am-list-body .am-list-item .am-input-control input{
+    font-size: 0.15rem; 
+}
+.change-list-body-text{
+    display: inline-block;
+    width: 50%;
+}
+.service-charge{
+    padding: .1rem .1rem;
+}

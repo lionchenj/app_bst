@@ -67,6 +67,8 @@ export class Message extends React.Component<MessageProps, MessageState> {
             })
           }).catch( err => {
             UIUtil.showError(err)
+              this.props.history.push("/login")
+
           })
         } else {
           UserService.Instance.mail().then( systemBulletinList => {
@@ -80,6 +82,8 @@ export class Message extends React.Component<MessageProps, MessageState> {
             })
           }).catch( err => {
             UIUtil.showError(err)
+            this.props.history.push("/login")
+
           })
         }
         
